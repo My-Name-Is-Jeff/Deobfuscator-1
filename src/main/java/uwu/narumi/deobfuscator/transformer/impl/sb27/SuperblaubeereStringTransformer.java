@@ -130,8 +130,12 @@ public class SuperblaubeereStringTransformer extends Transformer {
         return null;
     }
 
+    //TODO: Support for older versions
     private String decryptXor(String obj, String key) {
-        obj = new String(Base64.getDecoder().decode(obj.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+        try {
+            obj = new String(Base64.getDecoder().decode(obj.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+        } catch (Exception ignored) {
+        } //I know i know stupid but idc
         StringBuilder sb = new StringBuilder();
         char[] keyChars = key.toCharArray();
         int i = 0;

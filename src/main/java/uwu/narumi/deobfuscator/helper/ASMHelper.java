@@ -61,7 +61,7 @@ public class ASMHelper implements Opcodes {
     }
 
     public static boolean isNumber(AbstractInsnNode node) {
-        return isInteger(node) || isLong(node) || isFloat(node) || isDouble(node);
+        return node != null && (isInteger(node) || isLong(node) || isFloat(node) || isDouble(node));
     }
 
     public static String getString(AbstractInsnNode node) {
@@ -161,7 +161,7 @@ public class ASMHelper implements Opcodes {
     }
 
     public static AbstractInsnNode getNumber(float number) {
-        if (number >= 0 && number <= 2) {
+        if (number == 0 || number == 1 || number == 2) {
             return new InsnNode((int) (number + 11));
         } else {
             return new LdcInsnNode(number);
@@ -169,7 +169,7 @@ public class ASMHelper implements Opcodes {
     }
 
     public static AbstractInsnNode getNumber(double number) {
-        if (number >= 0 && number <= 1) {
+        if (number == 0 || number == 1) {
             return new InsnNode((int) (number + 14));
         } else {
             return new LdcInsnNode(number);
@@ -312,6 +312,12 @@ public class ASMHelper implements Opcodes {
                 && ((MethodInsnNode) node).owner.equals(owner)
                 && ((MethodInsnNode) node).name.equals(name)
                 && ((MethodInsnNode) node).desc.equals(desc);
+    }
+
+    public static boolean isMethodStartWith(AbstractInsnNode node, String owner, String startWith) {
+        return node instanceof MethodInsnNode
+                && ((MethodInsnNode) node).owner.equals(owner)
+                && ((MethodInsnNode) node).name.startsWith(startWith);
     }
 
     public static Map<AbstractInsnNode, Frame<SourceValue>> analyzeSource(ClassNode classNode, MethodNode methodNode) {
